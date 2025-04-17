@@ -29,10 +29,10 @@
       margin-top: 10px;
       font-size: 16px;
     }
-    .count {
+    .info {
       margin-top: 20px;
       font-weight: bold;
-      color: #444;
+      color: #333;
     }
   </style>
 </head>
@@ -50,7 +50,8 @@
       <iframe src="https://www.youtube.com/embed/{{ video_id }}?autoplay=1&mute=1&vq=small"
               allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-      <div class="count">Played {{ play_count }} times</div>
+      <div class="info">Played {{ play_count }} times</div>
+      <div class="info">Current IP: {{ ip_address }}</div>
 
       <form method="POST">
         {% if autorefresh %}
