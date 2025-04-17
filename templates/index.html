@@ -5,32 +5,18 @@
   <title>YouTube Auto Player</title>
   <style>
     body {
-      background: #f4f4f4;
+      background: #f0f0f0;
       font-family: Arial, sans-serif;
       display: flex;
-      align-items: center;
       justify-content: center;
-      height: 100vh;
+      padding-top: 50px;
     }
     .container {
       text-align: center;
-      background: #fff;
+      background: white;
       padding: 30px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    }
-    input {
-      padding: 10px;
-      width: 300px;
-      margin-top: 10px;
-    }
-    button {
-      padding: 10px 20px;
-      background-color: red;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      margin-top: 10px;
     }
     iframe {
       margin-top: 20px;
@@ -38,25 +24,54 @@
       height: 315px;
       border: none;
     }
+    input, button {
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+    .count {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #444;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>YouTube Video URL</h2>
-    <form method="POST">
-      <input type="text" name="youtube_url" placeholder="Paste YouTube URL" value="{{ request.form.youtube_url or '' }}" required>
-      <br>
-      <button type="submit">Play</button>
-    </form>
+    <h2>YouTube Video Auto Player</h2>
 
-    {% if video_url %}
-      <iframe src="{{ video_url }}" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    {% if not video_id %}
+      <form method="POST">
+        <input type="text" name="new_url" placeholder="Paste YouTube URL" required>
+        <br>
+        <button type="submit">Start Video</button>
+      </form>
+    {% else %}
+      <iframe src="https://www.youtube.com/embed/{{ video_id }}?autoplay=1&mute=1&vq=small"
+              allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-      <script>
-        setTimeout(function() {
-          location.reload();
-        }, 30000); // 30 seconds
-      </script>
+      <div class="count">Played {{ play_count }} times</div>
+
+      <form method="POST">
+        {% if autorefresh %}
+          <button type="submit" name="stop">Stop Auto-Refresh</button>
+        {% else %}
+          <button type="submit" name="start">Resume Auto-Refresh</button>
+        {% endif %}
+      </form>
+
+      <form method="POST" style="margin-top: 10px;">
+        <input type="text" name="new_url" placeholder="Change YouTube URL">
+        <button type="submit">Change URL</button>
+      </form>
+
+      {% if autorefresh %}
+        <script>
+          setTimeout(function() {
+            location.reload();
+          }, 30000); // 30 seconds
+        </script>
+      {% endif %}
     {% endif %}
   </div>
 </body>
