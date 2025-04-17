@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>YouTube Auto Player</title>
+  <style>
+    body {
+      background: #f4f4f4;
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .container {
+      text-align: center;
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    input {
+      padding: 10px;
+      width: 300px;
+      margin-top: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: red;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    iframe {
+      margin-top: 20px;
+      width: 560px;
+      height: 315px;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>YouTube Video URL</h2>
+    <form method="POST">
+      <input type="text" name="youtube_url" placeholder="Paste YouTube URL" value="{{ request.form.youtube_url or '' }}" required>
+      <br>
+      <button type="submit">Play</button>
+    </form>
+
+    {% if video_url %}
+      <iframe src="{{ video_url }}" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+      <script>
+        setTimeout(function() {
+          location.reload();
+        }, 30000); // 30 seconds
+      </script>
+    {% endif %}
+  </div>
+</body>
+</html>
