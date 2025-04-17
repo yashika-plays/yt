@@ -1,9 +1,9 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session
 import re
 from datetime import timedelta
 
 app = Flask(__name__)
-app.secret_key = "your_secret_key"  # Replace with a random secret string
+app.secret_key = "your_secret_key"  # Replace with a secure key
 app.permanent_session_lifetime = timedelta(days=1)
 
 def extract_video_id(url):
@@ -29,11 +29,13 @@ def index():
         elif "start" in request.form:
             session["autorefresh"] = True
 
-    # Count only if video is set and refresh is active
     if session.get("video_id") and session.get("autorefresh"):
         session["play_count"] += 1
+
+    user_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
 
     return render_template("index.html",
                            video_id=session.get("video_id"),
                            autorefresh=session.get("autorefresh"),
-                           play_count=session.get("play_count"))
+                           play_count=session.get("play_count"),
+                           ip_address=user_ip)
